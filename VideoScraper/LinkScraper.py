@@ -90,13 +90,14 @@ class BaseLinkScraper():
         for idx, iFrame in enumerate(iFramesList):
             print(idx)
             self.driver.switch_to.frame(iFrame)
-            self.wait = WebDriverWait(self.driver, 10)
+            self.driver.implicitly_wait(30)
 
             self.iFrame_page_sources.append(self.driver.page_source)
             self.driver.get_screenshot_as_file('iFrame' + str(idx) + '_' + str(counter) +'.png')
 
+            # TO DO Go to nested Frames and Navigate Back
             # nestedIFrameElements = self.getElementsFromDriverByTagName("iframe")
-            #
+            # #
             # if len(nestedIFrameElements) > 0:
             #     self.iFrameCounter += 1
             #     self.switchToIFramesAndReturnSource(nestedIFrameElements, self.iFrameCounter)
@@ -141,7 +142,7 @@ class DerivedLinkScraper(BaseLinkScraper):
 
 if __name__ == "__main__":
 
-
+    # try:
     website = "https://animepill.com/fireball-humorous-episode-1"
     scraper = DerivedLinkScraper()
     page_source = scraper.getPageSource(website, "iframe")
@@ -159,11 +160,12 @@ if __name__ == "__main__":
     #
     # src = tree.xpath("//*[@src]")
 
-    for idx, page_source in enumerate(self.iFrame_page_sources):
-        printSourceToTextFile(websiteName + "_src" + str(idx) + str(self.iFrameCounter) + ".txt", page_source)
+    for idx, page_source in enumerate(scraper.iFrame_page_sources):
+        printSourceToTextFile(websiteName + "_src" + str(idx) + str(scraper.iFrameCounter) + ".txt", page_source)
 
-    scraper.driver.quit()
-
+    # except:
+    #     scraper.driver.quit()
+    # finally:
     scraper.driver.close()
 
 
